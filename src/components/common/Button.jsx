@@ -6,6 +6,7 @@ const Button = ({onClick, label, classes, disabled}) => {
         disabled={disabled}
         onClick={onClick}
         className={classes}
+        type="button" 
         >
             {label}
         </button>
