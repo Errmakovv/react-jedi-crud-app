@@ -1,5 +1,5 @@
 import React from 'react'
-import Headline from './common/Headline'
+import Headline from '../common/Headline'
 
 function NotFoundPage() {
   return (

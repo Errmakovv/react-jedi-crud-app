@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Table from "./common/Table";
-import Form from './common/Form';
-import Headline from './common/Headline';
+import Table from "../common/Table";
+import Form from '../common/Form';
+import Headline from '../common/Headline';
 
 const data = [
     {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},

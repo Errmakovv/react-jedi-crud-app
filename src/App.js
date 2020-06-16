@@ -5,18 +5,18 @@ import {
     Route,
     Redirect
 } from "react-router-dom";
-import PeoplePage from './components/PeoplePage';
-import Header from './components/Header';
-import PlanetsPage from './components/PlanetsPage';
-import StarshipsPage from './components/StarshipsPage';
-import NotFoundPage from './components/NotFoundPage';
+import PeoplePage from './components/pages/PeoplePage';
+import PlanetsPage from './components/pages/PlanetsPage';
+import StarshipsPage from './components/pages/StarshipsPage';
+import NotFoundPage from './components/pages/NotFoundPage';
+import Navbar from './components/navbar/Navbar';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
     return (
         <Router>
-            <Header></Header>
+            <Navbar />
             <Switch>
                 <Redirect exact from="/" to="/people" />
                 <Route path="/people" component={PeoplePage} />
