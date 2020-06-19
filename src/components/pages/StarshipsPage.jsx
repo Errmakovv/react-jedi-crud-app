@@ -1,34 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link, useRouteMatch } from "react-router-dom";
 import Table from "../common/Table";
-import Form from '../common/Form';
 import Headline from '../common/Headline';
+import Button from '../common/Button';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
-
-function StarshipsPage() {
-    const [starships, setStarships] = useState(data);
-
-    const handleAddStarship = (starshipData) => {
-        const data = [...starships, starshipData];
-        setStarships(data)
-    }
+function StarshipsPage({ starships, setStarships }) {
+    const columns = starships.length ? Object.keys(starships[0]) : [];
+    const { path } = useRouteMatch();
 
     const handleDeleteStarship = (id) => {
         const data = starships.filter((starship) => id !== starship.id);
         setStarships(data)
-    }
-
-    const getInitialStarshipsData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
     }
 
     return (
@@ -37,12 +19,19 @@ function StarshipsPage() {
                  headline = 'Starships from Star Wars Universe'
                  classes = 'h2'
             />
+            <Link to='/starships/new'>
+                <Button
+                    label="New Starship"
+                    classes="btn btn-success m-2"
+                />
+            </Link>
             { starships.length ? 
                 <Table
                 data={starships}
                 columns={columns}
                 onDeleteData={handleDeleteStarship}
                 tableDescriptor="Starships"
+                pathname={path}
                 />
                 : 
                 <Headline
@@ -50,11 +39,6 @@ function StarshipsPage() {
                 classes = 'h3 text-center'
                 />
             }
-            <Form
-                initialData={getInitialStarshipsData()}
-                columns={columns}
-                onAddData={handleAddStarship}
-            />
         </div>
     );
 }

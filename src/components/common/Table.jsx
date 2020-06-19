@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from './Button';
+import { Link } from "react-router-dom";
 
-function Table({columns, data, tableDescriptor, onDeleteData}) {
+function Table({columns, data, tableDescriptor, onDeleteData, pathname}) {
     
     const handleClick = (id) => {
         onDeleteData(id);
@@ -22,7 +23,13 @@ function Table({columns, data, tableDescriptor, onDeleteData}) {
                     <tr key={item.id}>
                         <th scope="row">{++index}</th>
                         {columns.map(columnTitle => (
-                            <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
+                            columnTitle === 'name'?
+                            <td key={item[columnTitle]+columnTitle}>
+                                <Link className="text-warning" to={`${pathname}/${item.id}`}>
+                                    {item[columnTitle]}
+                                </Link>
+                            </td>
+                            : <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
                         ))}
                         <td>
                             <Button

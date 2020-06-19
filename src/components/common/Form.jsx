@@ -1,30 +1,34 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Input from "./Input";
 import Button from "./Button";
 
-const Form = ({columns, initialData, onAddData}) => {
-    const [personData, setPersonData] = useState(initialData);
+const Form = ({columns, initialData, onAddData, rootPath}) => {
+    const [itemData, setItemData] = useState(initialData);
     const [errorFields, setErrorFields] = useState([]);
+    const history = useHistory();
+
     const errorMessage = 'Field should not be empty';
 
     const handleClick = (event) => {
         event.preventDefault();
-        const invalid = (columnName) => personData[columnName].length === 0;
+        const invalid = (columnName) => itemData[columnName].length === 0;
         const errorFields = columns.filter(invalid);
         if(errorFields.length) {
             setErrorFields(errorFields);
         } else {
-            onAddData(personData);
-            setPersonData(initialData);
+            onAddData(itemData);
+            setItemData(initialData);
             setErrorFields([]);
+            history.push(rootPath);
         }
     }
 
     const handleChange = (event) => {
         const { currentTarget : input } = event;
-        const data = {...personData};
+        const data = {...itemData};
         data[input.name] = input.value;
-        setPersonData(data)
+        setItemData(data)
     }
 
 
@@ -36,7 +40,7 @@ const Form = ({columns, initialData, onAddData}) => {
                 name={columnName}
                 label={columnName}
                 error={errorFields.includes(columnName) ? errorMessage : ''}
-                value={personData[columnName]}
+                value={itemData[columnName]}
                 type="input"
                 onChange={handleChange}
                 />
