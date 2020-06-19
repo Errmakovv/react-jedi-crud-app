@@ -22,20 +22,50 @@ function App() {
     const [starships, setStarships] = useState([]);
     console.log('rerender')
 
-    useEffect( () => {
+    useEffect(() => {
         const getData = async () => {
             console.log('effect')
             const peopleData = await getPeople()
-            const planetsData = await getPlanets()
-            const starshipsData = await getStarships()
             setPeople(peopleData)
+        }
+
+        getData()
+    }, [])
+
+    useEffect(() => {
+        const getData = async () => {
+            console.log('effect')
+            const planetsData = await getPlanets()
             setPlanets(planetsData)
+        }
+
+        getData()
+    }, [])
+
+    useEffect(() => {
+        const getData = async () => {
+            console.log('effect')
+            const starshipsData = await getStarships()
             setStarships(starshipsData)
         }
 
         getData()
     }, [])
 
+    useEffect( () => {
+        console.log('people effect', people.length)
+        localStorage.setItem('people', JSON.stringify(people))
+    }, [people])
+
+    useEffect( () => {
+        console.log('planets effect', planets.length)
+        localStorage.setItem('planets', JSON.stringify(planets))
+    }, [planets])
+
+    useEffect( () => {
+        console.log('starships effect', starships.length)
+        localStorage.setItem('starships', JSON.stringify(starships))
+    }, [starships])
 
     return (
         <Router>

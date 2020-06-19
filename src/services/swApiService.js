@@ -5,7 +5,6 @@ const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
 const url = 'https://swapi.dev/api'
 
 export const getPeople = async () => {
-  localStorage.clear()
   if(localStorage.getItem('people')) {
     console.log('local people');
     return JSON.parse(localStorage.getItem('people'));
@@ -19,7 +18,6 @@ export const getPeople = async () => {
 }
 
 export const getPlanets = async () => {
-  localStorage.clear()
   if(localStorage.getItem('planets')) {
     console.log('local planets');
     return JSON.parse(localStorage.getItem('planets'));
@@ -33,7 +31,6 @@ export const getPlanets = async () => {
 }
 
 export const getStarships = async () => {
-  localStorage.clear()
   if(localStorage.getItem('starships')) {
     console.log('local starships');
     return JSON.parse(localStorage.getItem('starships'));
