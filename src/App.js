@@ -12,7 +12,9 @@ import NotFoundPage from './components/pages/NotFoundPage';
 import Navbar from './components/navbar/Navbar';
 import FormPage from './components/pages/FormPage';
 
-import { getPeople, getPlanets, getStarships } from './services/swApiService';
+import { getPeople, personSchema, personColumns } from './services/peopleService';
+import { getPlanets, planetSchema, planetColumns } from './services/planetsService';
+import { getStarships, starshipSchema, starshipColumns } from './services/starshipsService';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -20,11 +22,9 @@ function App() {
     const [people, setPeople] = useState([]);
     const [planets, setPlanets] = useState([]);
     const [starships, setStarships] = useState([]);
-    console.log('rerender')
-
+    console.log('rerender');
     useEffect(() => {
         const getData = async () => {
-            console.log('effect')
             const peopleData = await getPeople()
             setPeople(peopleData)
         }
@@ -34,7 +34,6 @@ function App() {
 
     useEffect(() => {
         const getData = async () => {
-            console.log('effect')
             const planetsData = await getPlanets()
             setPlanets(planetsData)
         }
@@ -44,7 +43,6 @@ function App() {
 
     useEffect(() => {
         const getData = async () => {
-            console.log('effect')
             const starshipsData = await getStarships()
             setStarships(starshipsData)
         }
@@ -53,17 +51,15 @@ function App() {
     }, [])
 
     useEffect( () => {
-        console.log('people effect', people.length)
-        localStorage.setItem('people', JSON.stringify(people))
+        console.log('data fetch')
+       localStorage.setItem('people', JSON.stringify(people))
     }, [people])
 
     useEffect( () => {
-        console.log('planets effect', planets.length)
         localStorage.setItem('planets', JSON.stringify(planets))
     }, [planets])
 
     useEffect( () => {
-        console.log('starships effect', starships.length)
         localStorage.setItem('starships', JSON.stringify(starships))
     }, [starships])
 
@@ -71,13 +67,40 @@ function App() {
         <Router>
             <Navbar />
             <Switch>
-                <Route path="/people/:id" render={(props) => <FormPage {...props} setData={setPeople} data={people} rootPath='/people' />} />
+                <Route path="/people/:id" render={(props) => 
+                    <FormPage 
+                    {...props} 
+                    setData={setPeople} 
+                    data={people} 
+                    schema={personSchema} 
+                    columns={personColumns}
+                    rootPath='/people' 
+                    />
+                } />
                 <Route path="/people" render={(props) => <PeoplePage {...props} setPeople={setPeople} people={people} />} />
 
-                <Route path="/planets/:id" render={(props) => <FormPage {...props} setData={setPlanets} data={planets} rootPath='/planets' />} />
+                <Route path="/planets/:id" render={(props) => 
+                    <FormPage
+                    {...props} 
+                    setData={setPlanets} 
+                    data={planets} 
+                    schema={planetSchema}
+                    columns={planetColumns}  
+                    rootPath='/planets' 
+                    />
+                } />
                 <Route path="/planets" render={(props) => <PlanetsPage {...props} setPlanets={setPlanets} planets={planets} />} />
 
-                <Route path="/starships/:id" render={(props) => <FormPage {...props} setData={setStarships} data={starships} rootPath='/starships' />} />
+                <Route path="/starships/:id" render={(props) => 
+                    <FormPage 
+                    {...props} 
+                    setData={setStarships} 
+                    data={starships} 
+                    schema={starshipSchema}
+                    columns={starshipColumns} 
+                    rootPath='/starships' 
+                    />
+                } />
                 <Route path="/starships" render={(props) => <StarshipsPage {...props} setStarships={setStarships} starships={starships} />} />
 
                 <Redirect exact from="/" to="/people" />

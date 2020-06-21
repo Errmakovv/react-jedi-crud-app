@@ -21,7 +21,7 @@ function PeoplePage({ people, setPeople }) {
             />
             <Link to='/people/new'>
                 <Button
-                    label="New Person"
+                    label="Create Person"
                     classes="btn btn-success m-2"
                 />
             </Link>

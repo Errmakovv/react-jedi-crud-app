@@ -21,7 +21,7 @@ function StarshipsPage({ starships, setStarships }) {
             />
             <Link to='/starships/new'>
                 <Button
-                    label="New Starship"
+                    label="Create Starship"
                     classes="btn btn-success m-2"
                 />
             </Link>

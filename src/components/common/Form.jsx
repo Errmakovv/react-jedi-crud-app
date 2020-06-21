@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Input from "./Input";
 import Button from "./Button";
 
-const Form = ({columns, initialData, onAddData, rootPath}) => {
+const Form = ({columns, initialData, onAddData, rootPath, schema}) => {
     const [itemData, setItemData] = useState(initialData);
-    const [errorFields, setErrorFields] = useState([]);
+    const [error, setError] = useState('');
     const history = useHistory();
-
-    const errorMessage = 'Field should not be empty';
+    console.log('render form');
+    
+    useEffect(() => {
+        console.log('effect form');
+        setItemData(initialData);
+    }, [initialData])
 
     const handleClick = (event) => {
         event.preventDefault();
-        const invalid = (columnName) => itemData[columnName].length === 0;
-        const errorFields = columns.filter(invalid);
-        if(errorFields.length) {
-            setErrorFields(errorFields);
+        let { error } = schema.validate(itemData);
+        if(error) {
+            setError(error);
         } else {
             onAddData(itemData);
             setItemData(initialData);
-            setErrorFields([]);
+            setError('');
             history.push(rootPath);
         }
     }
@@ -39,12 +42,12 @@ const Form = ({columns, initialData, onAddData, rootPath}) => {
                 key={columnName}
                 name={columnName}
                 label={columnName}
-                error={errorFields.includes(columnName) ? errorMessage : ''}
                 value={itemData[columnName]}
                 type="input"
                 onChange={handleChange}
                 />
             ))}
+            {error && <div className="alert alert-danger">{error.toString()}</div>}
             <Button
                 label="Save"
                 classes="btn btn-danger"
@@ -54,4 +57,4 @@ const Form = ({columns, initialData, onAddData, rootPath}) => {
     );
 };
 
-export default Form;
+export default Form

@@ -1,13 +1,14 @@
 import React from 'react'
+import { nanoid } from 'nanoid';
+import { idSize } from '../../services/utils';
 import Form from '../common/Form';
 
-function FormPage({ match, data, setData, rootPath }) {
-  const columns = data.length ? Object.keys(data[0]) : [];
+function FormPage({ match, data, setData, rootPath, schema, columns }) {
   const { id } = match.params;
   const isNew = id === 'new';
-
+  console.log('FormPage render')
   const handleAddData = (itemData) => {
-    const newData = [...data, itemData];
+    const newData = [...data, {...itemData, id: nanoid(idSize)}];
     setData(newData)
   }
 
@@ -17,7 +18,7 @@ function FormPage({ match, data, setData, rootPath }) {
     )
     setData(newData)
   }
-
+  
   const getData = (id) => {
     return data.find((item) => item.id === id)
   }
@@ -32,13 +33,16 @@ function FormPage({ match, data, setData, rootPath }) {
   return (
     <div className="container">
       <Form
-      initialData={isNew ? getInitialData() : getData(id)}
+      initialData={isNew ? getInitialData() : (getData(id) || getInitialData())}
       columns={columns}
       onAddData={isNew ? handleAddData : handleUpdateData}
       rootPath={rootPath}
+      schema={schema}
       />
     </div>
   )
 }
 
-export default FormPage
+const areEqual = (prev, next) => prev.data.length === next.data.length
+
+export default React.memo(FormPage, areEqual);

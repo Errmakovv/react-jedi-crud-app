@@ -21,7 +21,7 @@ function PlanetsPage({ planets, setPlanets }) {
             />
             <Link to='/planets/new'>
                 <Button
-                    label="New Planet"
+                    label="Create Planet"
                     classes="btn btn-success m-2"
                 />
             </Link>
