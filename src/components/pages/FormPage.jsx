@@ -6,7 +6,7 @@ import Form from '../common/Form';
 function FormPage({ match, data, setData, rootPath, schema, columns }) {
   const { id } = match.params;
   const isNew = id === 'new';
-  console.log('FormPage render')
+ 
   const handleAddData = (itemData) => {
     const newData = [...data, {...itemData, id: nanoid(idSize)}];
     setData(newData)

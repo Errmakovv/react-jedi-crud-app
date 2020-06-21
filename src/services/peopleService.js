@@ -31,10 +31,8 @@ export const personSchema = Joi.object({
 
 export const getPeople = async () => {
   if(localStorage.getItem('people')) {
-    console.log('local')
     return JSON.parse(localStorage.getItem('people'));
   }
-  console.log('api')
   const peopleResponse = await (await fetch(`${url}/people`)).json();
 
   return  peopleResponse.results.map(({name, height, mass, gender, birth_year}) => ({

@@ -7,10 +7,8 @@ const Form = ({columns, initialData, onAddData, rootPath, schema}) => {
     const [itemData, setItemData] = useState(initialData);
     const [error, setError] = useState('');
     const history = useHistory();
-    console.log('render form');
     
     useEffect(() => {
-        console.log('effect form');
         setItemData(initialData);
     }, [initialData])
 

@@ -22,7 +22,7 @@ function App() {
     const [people, setPeople] = useState([]);
     const [planets, setPlanets] = useState([]);
     const [starships, setStarships] = useState([]);
-    console.log('rerender');
+   
     useEffect(() => {
         const getData = async () => {
             const peopleData = await getPeople()
@@ -51,7 +51,6 @@ function App() {
     }, [])
 
     useEffect( () => {
-        console.log('data fetch')
        localStorage.setItem('people', JSON.stringify(people))
     }, [people])
 
