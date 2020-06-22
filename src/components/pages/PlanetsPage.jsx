@@ -1,34 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link, useRouteMatch } from "react-router-dom";
 import Table from "../common/Table";
-import Form from '../common/Form';
 import Headline from '../common/Headline';
+import Button from '../common/Button';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
-
-function PlanetsPage() {
-    const [planets, setPlanets] = useState(data);
-
-    const handleAddPlanet = (planetData) => {
-        const data = [...planets, planetData];
-        setPlanets(data)
-    }
+function PlanetsPage({ planets, setPlanets }) {
+    const columns = planets.length ? Object.keys(planets[0]) : [];
+    const { path } = useRouteMatch();
 
     const handleDeletePlanet = (id) => {
         const data = planets.filter((planet) => id !== planet.id);
         setPlanets(data)
-    }
-
-    const getInitialPlanetsData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
     }
 
     return (
@@ -37,12 +19,19 @@ function PlanetsPage() {
                  headline = 'Planets from Star Wars Universe'
                  classes = 'h2'
             />
+            <Link to='/planets/new'>
+                <Button
+                    label="Create Planet"
+                    classes="btn btn-success m-2"
+                />
+            </Link>
             { planets.length ? 
                 <Table
                 data={planets}
                 columns={columns}
                 onDeleteData={handleDeletePlanet}
                 tableDescriptor="Planets"
+                pathname={path}
                 />
                 : 
                 <Headline
@@ -50,11 +39,6 @@ function PlanetsPage() {
                 classes = 'h3 text-center'
                 />
             }
-            <Form
-                initialData={getInitialPlanetsData()}
-                columns={columns}
-                onAddData={handleAddPlanet}
-            />
         </div>
     );
 }

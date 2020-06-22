@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import Input from "./Input";
 import Button from "./Button";
 
-const Form = ({columns, initialData, onAddData}) => {
-    const [personData, setPersonData] = useState(initialData);
-    const [errorFields, setErrorFields] = useState([]);
-    const errorMessage = 'Field should not be empty';
+const Form = ({columns, initialData, onAddData, rootPath, schema}) => {
+    const [itemData, setItemData] = useState(initialData);
+    const [error, setError] = useState('');
+    const history = useHistory();
+    
+    useEffect(() => {
+        setItemData(initialData);
+    }, [initialData])
 
     const handleClick = (event) => {
         event.preventDefault();
-        const invalid = (columnName) => personData[columnName].length === 0;
-        const errorFields = columns.filter(invalid);
-        if(errorFields.length) {
-            setErrorFields(errorFields);
+        let { error } = schema.validate(itemData);
+        if(error) {
+            setError(error);
         } else {
-            onAddData(personData);
-            setPersonData(initialData);
-            setErrorFields([]);
+            onAddData(itemData);
+            setItemData(initialData);
+            setError('');
+            history.push(rootPath);
         }
     }
 
     const handleChange = (event) => {
         const { currentTarget : input } = event;
-        const data = {...personData};
+        const data = {...itemData};
         data[input.name] = input.value;
-        setPersonData(data)
+        setItemData(data)
     }
 
 
@@ -35,12 +40,12 @@ const Form = ({columns, initialData, onAddData}) => {
                 key={columnName}
                 name={columnName}
                 label={columnName}
-                error={errorFields.includes(columnName) ? errorMessage : ''}
-                value={personData[columnName]}
+                value={itemData[columnName]}
                 type="input"
                 onChange={handleChange}
                 />
             ))}
+            {error && <div className="alert alert-danger">{error.toString()}</div>}
             <Button
                 label="Save"
                 classes="btn btn-danger"
@@ -50,4 +55,4 @@ const Form = ({columns, initialData, onAddData}) => {
     );
 };
 
-export default Form;
+export default Form
