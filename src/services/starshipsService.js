@@ -38,9 +38,9 @@ export const getStarships = async () => {
   if(localStorage.getItem('starships')) {
     return JSON.parse(localStorage.getItem('starships'));
   }
-  const peopleResponse = await (await fetch(`${url}/starships`)).json();
+  const starshipResponse = await (await fetch(`${url}/starships`)).json();
 
-  return  peopleResponse.results.map(({name, model, cost_in_credits, length, passengers}) => ({
+  return  starshipResponse.results.map(({name, model, cost_in_credits, length, passengers}) => ({
       name, model, cost_in_credits, length, passengers, id: nanoid(idSize)
   }))
 }

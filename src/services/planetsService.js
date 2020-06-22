@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { idSize, url, proxyUrl } from './utils'
+import { idSize, url } from './utils'
 import Joi from '@hapi/joi'
 
 export const planetColumns = [
@@ -35,9 +35,9 @@ export const getPlanets = async () => {
   if(localStorage.getItem('planets')) {
     return JSON.parse(localStorage.getItem('planets'));
   }
-  const peopleResponse = await (await fetch(`${proxyUrl}${url}/planets`)).json();
+  const planetResponse = await (await fetch(`${url}/planets`)).json();
 
-  return  peopleResponse.results.map(({name, surface_water, population, rotation_period, diameter}) => ({
+  return  planetResponse.results.map(({name, surface_water, population, rotation_period, diameter}) => ({
       name, surface_water, population, rotation_period, diameter, id: nanoid(idSize)
   }))
 }
