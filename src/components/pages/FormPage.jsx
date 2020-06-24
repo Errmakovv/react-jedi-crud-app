@@ -1,22 +1,19 @@
 import React from 'react'
-import { nanoid } from 'nanoid';
-import { idSize } from '../../services/utils';
 import Form from '../common/Form';
+import { useDispatch, useSelector } from 'react-redux';
 
-function FormPage({ match, data, setData, rootPath, schema, columns }) {
+function FormPage({ match, rootPath, schema, columns, addAction, updateAction, selector }) {
+  const dispatch = useDispatch();
+  const data = useSelector(state => selector(state));
   const { id } = match.params;
   const isNew = id === 'new';
  
   const handleAddData = (itemData) => {
-    const newData = [...data, {...itemData, id: nanoid(idSize)}];
-    setData(newData)
+    dispatch(addAction(itemData));
   }
 
   const handleUpdateData = (itemData) => {
-    const newData = data.map((item) => 
-      item.id === itemData.id ? itemData : item
-    )
-    setData(newData)
+    dispatch(updateAction(itemData));
   }
   
   const getData = (id) => {

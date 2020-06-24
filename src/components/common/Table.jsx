@@ -1,11 +1,22 @@
 import React from 'react';
 import Button from './Button';
-import { Link } from "react-router-dom";
+import { nanoid } from 'nanoid';
 
-function Table({columns, data, tableDescriptor, onDeleteData, pathname}) {
+function Table({columns, data, tableDescriptor, onDeleteData}) {
     
     const handleClick = (id) => {
         onDeleteData(id);
+    }
+
+    const createKey = value => {
+        return value + nanoid();
+    }
+
+    const renderCell = (item, column) => column.content ?
+        column?.content(item) : item[column.colName];
+
+    if (!data?.length) {
+        return <h4>There are no data for {tableDescriptor}</h4>
     }
 
     return (
@@ -13,29 +24,27 @@ function Table({columns, data, tableDescriptor, onDeleteData, pathname}) {
             <thead>
             <tr>
                 <th scope="col">{tableDescriptor}</th>
-                {columns.map(columnTitle => (
-                    <th key={columnTitle} scope="col">{columnTitle}</th>
+                {columns.map(column => (
+                    <th key={createKey(column.colName)} scope="col">{column.colName}</th>
                 ))}
             </tr>
             </thead>
             <tbody>
                 {data.map((item, index) => (
-                    <tr key={item.id}>
+                    <tr key={createKey(item.name)}>
                         <th scope="row">{++index}</th>
-                        {columns.map(columnTitle => (
-                            columnTitle === 'name'?
-                            <td key={item[columnTitle]+columnTitle}>
-                                <Link className="text-warning" to={`${pathname}/${item.id}`}>
-                                    {item[columnTitle]}
-                                </Link>
-                            </td>
-                            : <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
-                        ))}
+                        {columns.map(column => {
+                            return (
+                                <td key={createKey(item.name)}>
+                                    {renderCell(item, column)}
+                                </td>
+                            )
+                        })}
                         <td>
                             <Button
-                            label="Delete"
-                            classes="btn btn-danger"
-                            onClick={() => handleClick(item.id)}
+                                onClick={()=> handleClick(item.id)}
+                                classes="btn btn-danger"
+                                label="Delete"
                             />
                         </td>
                     </tr>
