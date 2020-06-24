@@ -26,6 +26,7 @@ export const personSchema = Joi.object({
 
   birth_year: Joi.string()
       .required(),
+  beloved: Joi.boolean(),
   id: Joi.string()
 })
 
@@ -36,6 +37,6 @@ export const getPeople = async () => {
   const peopleResponse = await (await fetch(`${url}/people`)).json();
 
   return  peopleResponse.results.map(({name, height, mass, gender, birth_year}) => ({
-      name, height, mass, gender, birth_year, id: nanoid(idSize)
+      name, height, mass, gender, birth_year, beloved: false, id: nanoid(idSize)
   }))
 }

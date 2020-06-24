@@ -1,16 +1,23 @@
 import React from 'react';
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Table from "../common/Table";
 import Headline from '../common/Headline';
 import Button from '../common/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPeople } from '../../store/selectors/people';
+import { deletePerson, changeBelovedStatus } from '../../store/actions/people';
+import { getTableColumns } from './utils';
 
-function PeoplePage({ people, setPeople }) {
-    const columns = people.length ? Object.keys(people[0]) : [];
-    const { path } = useRouteMatch();
+function PeoplePage() {
+    const dispatch = useDispatch();
+    const people = useSelector(state => getAllPeople(state));
+
+    const handleBelovedStatus = id => {
+        dispatch(changeBelovedStatus(id));
+    }
 
     const handleDeletePerson = (id) => {
-        const data = people.filter((person) => id !== person.id);
-        setPeople(data)
+        dispatch(deletePerson(id));
     }
 
     return (
@@ -24,21 +31,13 @@ function PeoplePage({ people, setPeople }) {
                     label="Create Person"
                     classes="btn btn-success m-2"
                 />
-            </Link>
-            { people.length ? 
-                <Table
-                data={people}
-                columns={columns}
-                onDeleteData={handleDeletePerson}
-                tableDescriptor="People"
-                pathname={path}
-                /> 
-                : 
-                <Headline
-                headline = 'No data'
-                classes = 'h3 text-center'
-                />
-            }
+            </Link> 
+            <Table
+            data={people}
+            columns={getTableColumns(people, 'people', handleBelovedStatus)}
+            onDeleteData={handleDeletePerson}
+            tableDescriptor="People"
+            /> 
         </div>
     );
 }

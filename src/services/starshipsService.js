@@ -31,6 +31,7 @@ export const starshipSchema = Joi.object({
       .pattern(/^[0-9]*[.,]?[0-9]+$/, 'numbers')
       .allow('n/a') 
       .required(),
+  beloved: Joi.boolean(),
   id: Joi.string()
 })
 
@@ -41,6 +42,6 @@ export const getStarships = async () => {
   const starshipResponse = await (await fetch(`${url}/starships`)).json();
 
   return  starshipResponse.results.map(({name, model, cost_in_credits, length, passengers}) => ({
-      name, model, cost_in_credits, length, passengers, id: nanoid(idSize)
+      name, model, cost_in_credits, length, passengers, beloved: false, id: nanoid(idSize)
   }))
 }

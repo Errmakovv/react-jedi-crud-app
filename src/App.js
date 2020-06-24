@@ -1,4 +1,5 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useEffect }  from 'react';
+import { useDispatch } from 'react-redux';
 import {
     BrowserRouter as Router,
     Switch,
@@ -16,51 +17,48 @@ import { getPeople, personSchema, personColumns } from './services/peopleService
 import { getPlanets, planetSchema, planetColumns } from './services/planetsService';
 import { getStarships, starshipSchema, starshipColumns } from './services/starshipsService';
 
+import { setPeople, addPerson, updatePerson } from './store/actions/people';
+import { setStarships, addStarship, updateStarship } from './store/actions/starships';
+import { setPlanets, addPlanet, updatePlanet } from './store/actions/planets';
+
+import { getAllPeople } from './store/selectors/people';
+import { getAllPlanets } from './store/selectors/planets';
+import { getAllStarships } from './store/selectors/starships';
+
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
-    const [people, setPeople] = useState([]);
-    const [planets, setPlanets] = useState([]);
-    const [starships, setStarships] = useState([]);
-   
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const getData = async () => {
             const peopleData = await getPeople()
-            setPeople(peopleData)
+            dispatch(setPeople(peopleData));
         }
 
         getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         const getData = async () => {
             const planetsData = await getPlanets()
-            setPlanets(planetsData)
+            dispatch(setPlanets(planetsData));
         }
 
         getData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         const getData = async () => {
             const starshipsData = await getStarships()
-            setStarships(starshipsData)
+            dispatch(setStarships(starshipsData));
         }
 
         getData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    useEffect( () => {
-       localStorage.setItem('people', JSON.stringify(people))
-    }, [people])
-
-    useEffect( () => {
-        localStorage.setItem('planets', JSON.stringify(planets))
-    }, [planets])
-
-    useEffect( () => {
-        localStorage.setItem('starships', JSON.stringify(starships))
-    }, [starships])
 
     return (
         <Router>
@@ -68,39 +66,42 @@ function App() {
             <Switch>
                 <Route path="/people/:id" render={(props) => 
                     <FormPage 
-                    {...props} 
-                    setData={setPeople} 
-                    data={people} 
+                    {...props}
+                    addAction={addPerson} 
+                    updateAction={updatePerson} 
+                    selector={getAllPeople}
                     schema={personSchema} 
                     columns={personColumns}
                     rootPath='/people' 
                     />
                 } />
-                <Route path="/people" render={(props) => <PeoplePage {...props} setPeople={setPeople} people={people} />} />
+                <Route path="/people" render={(props) => <PeoplePage {...props} />} />
 
                 <Route path="/planets/:id" render={(props) => 
                     <FormPage
-                    {...props} 
-                    setData={setPlanets} 
-                    data={planets} 
+                    {...props}  
+                    addAction={addPlanet} 
+                    updateAction={updatePlanet} 
+                    selector={getAllPlanets}
                     schema={planetSchema}
                     columns={planetColumns}  
                     rootPath='/planets' 
                     />
                 } />
-                <Route path="/planets" render={(props) => <PlanetsPage {...props} setPlanets={setPlanets} planets={planets} />} />
+                <Route path="/planets" render={(props) => <PlanetsPage {...props} />} />
 
                 <Route path="/starships/:id" render={(props) => 
                     <FormPage 
-                    {...props} 
-                    setData={setStarships} 
-                    data={starships} 
+                    {...props}
+                    addAction={addStarship} 
+                    updateAction={updateStarship} 
+                    selector={getAllStarships}
                     schema={starshipSchema}
                     columns={starshipColumns} 
                     rootPath='/starships' 
                     />
                 } />
-                <Route path="/starships" render={(props) => <StarshipsPage {...props} setStarships={setStarships} starships={starships} />} />
+                <Route path="/starships" render={(props) => <StarshipsPage {...props} />} />
 
                 <Redirect exact from="/" to="/people" />
                 <Route component={NotFoundPage} />
